@@ -19,7 +19,7 @@ def main() -> int:
     load_dotenv()
     port = os.getenv("PHOENIX_PORT", "6006")
     project = os.getenv("PHOENIX_PROJECT_NAME", "claw-hermes-relay")
-    base_url = f"http://localhost:{port}"
+    base_url = f"http://127.0.0.1:{port}"
 
     handoff_id = f"smoke-{uuid.uuid4().hex[:8]}"
     resource = Resource.create(
@@ -59,7 +59,7 @@ def main() -> int:
 
     # Query Phoenix GraphQL API to verify span landed in project
     query = """
-    query($name: String!) {
+    query {
       projects(first: 20) {
         edges {
           node {
@@ -70,14 +70,22 @@ def main() -> int:
       }
     }
     """
-    time.sleep(1.0)
+    time.sleep(1.5)
     resp = httpx.post(
         f"{base_url}/graphql",
-        json={"query": query, "variables": {"name": project}},
+        json={"query": query},
         timeout=5.0,
     )
-    print(f"Phoenix GraphQL HTTP {resp.status_code}: {resp.text[:400]}")
-    return 0 if resp.status_code == 200 and project in resp.text else 1
+    print(f"Phoenix GraphQL HTTP {resp.status_code}: {resp.text[:500]}")
+    if resp.status_code != 200:
+        return 1
+    edges = resp.json().get("data", {}).get("projects", {}).get("edges", [])
+    matched = [e["node"] for e in edges if e.get("node", {}).get("name") == project]
+    if not matched or matched[0].get("traceCount", 0) < 1:
+        print(f"Expected project {project!r} with traceCount >= 1, got: {edges}")
+        return 1
+    print(f"Verified Phoenix project {project!r} traceCount={matched[0]['traceCount']}")
+    return 0
 
 
 if __name__ == "__main__":

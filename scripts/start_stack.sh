@@ -15,14 +15,14 @@ mkdir -p ".openclaw-state" "phoenix_data" "docs/screenshots" "logs"
 PHOENIX_PORT="${PHOENIX_PORT:-6006}"
 PHOENIX_GRPC_PORT="${PHOENIX_GRPC_PORT:-4317}"
 
-echo "Starting Arize Phoenix on http://localhost:${PHOENIX_PORT} (OTLP gRPC :${PHOENIX_GRPC_PORT})..."
-PHOENIX_PORT="$PHOENIX_PORT" PHOENIX_GRPC_PORT="$PHOENIX_GRPC_PORT" PHOENIX_WORKING_DIR="$ROOT_DIR/phoenix_data" \
+echo "Starting Arize Phoenix on http://127.0.0.1:${PHOENIX_PORT} (OTLP gRPC :${PHOENIX_GRPC_PORT})..."
+PHOENIX_HOST="127.0.0.1" PHOENIX_PORT="$PHOENIX_PORT" PHOENIX_GRPC_PORT="$PHOENIX_GRPC_PORT" PHOENIX_WORKING_DIR="$ROOT_DIR/phoenix_data" \
   nohup "$ROOT_DIR/.venv/bin/phoenix" serve > "$ROOT_DIR/logs/phoenix.log" 2>&1 &
 echo $! > "$ROOT_DIR/logs/phoenix.pid"
 
-for i in $(seq 1 30); do
-  if curl -sf "http://localhost:${PHOENIX_PORT}" >/dev/null 2>&1; then
-    echo "Arize Phoenix is up at http://localhost:${PHOENIX_PORT}"
+for i in $(seq 1 45); do
+  if curl -sf "http://127.0.0.1:${PHOENIX_PORT}" >/dev/null 2>&1; then
+    echo "Arize Phoenix is up at http://127.0.0.1:${PHOENIX_PORT}"
     break
   fi
   sleep 1

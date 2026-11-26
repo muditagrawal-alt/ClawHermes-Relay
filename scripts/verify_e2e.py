@@ -46,8 +46,8 @@ def main() -> int:
 
     phoenix_port = os.getenv("PHOENIX_PORT", "6006")
     try:
-        r = httpx.get(f"http://localhost:{phoenix_port}", timeout=3.0)
-        print(f"[OK]   Arize Phoenix UI reachable at http://localhost:{phoenix_port} (HTTP {r.status_code})")
+        r = httpx.get(f"http://127.0.0.1:{phoenix_port}", timeout=3.0)
+        print(f"[OK]   Arize Phoenix UI reachable at http://127.0.0.1:{phoenix_port} (HTTP {r.status_code})")
     except Exception as exc:
         print(f"[WARN] Arize Phoenix not reachable on :{phoenix_port} ({exc})")
 

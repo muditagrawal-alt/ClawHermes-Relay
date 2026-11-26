@@ -73,9 +73,9 @@ def _truncate(value: Any, limit: int = _MAX_FIELD_CHARS) -> str:
 
 
 def _trace_endpoint() -> str:
-    base = os.getenv("PHOENIX_COLLECTOR_ENDPOINT", "http://localhost:6006").strip().rstrip("/")
+    base = os.getenv("PHOENIX_COLLECTOR_ENDPOINT", "http://127.0.0.1:6006").strip().rstrip("/")
     if not base:
-        base = "http://localhost:6006"
+        base = "http://127.0.0.1:6006"
     if base.endswith("/v1/traces"):
         return base
     return f"{base}/v1/traces"
