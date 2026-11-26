@@ -1,0 +1,9 @@
+arize-phoenix
+arize-phoenix-otel
+openinference-semantic-conventions
+opentelemetry-exporter-otlp-proto-http
+ddgs
+httpx
+beautifulsoup4
+python-dotenv
+slack-sdk

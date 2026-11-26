@@ -1,0 +1,17 @@
+name: phoenix-otel
+label: Arize Phoenix OpenTelemetry
+kind: observability
+version: 1.0.0
+description: >
+  Exports Hermes Agent turns, LLM generations, tool executions, and Slack
+  handoff correlation spans using OpenInference semantic conventions over
+  OTLP/HTTP to Arize Phoenix.
+author: claw-hermes-relay
+requires_env: []
+optional_env:
+  - name: PHOENIX_COLLECTOR_ENDPOINT
+    description: "Arize Phoenix base endpoint (default: http://localhost:6006)"
+  - name: PHOENIX_PROJECT_NAME
+    description: "Arize Phoenix project name (default: claw-hermes-relay)"
+  - name: HERMES_PHOENIX_DEBUG
+    description: "Enable verbose telemetry debug logging (true/false)"
